@@ -1,4 +1,4 @@
-autobackup
+AutoBackup
 ==========
 
 hola, cree este script bash hace muchos años, realmente lo use para realizar respaldos en los servidores que manejo, ya que requería respaldos incrementales y que permita automatizar todo el proceso y eliminar las copias luego de 7 días. espero que le puede ser útil, utiliza el cliente smtp sendEmail (http://caspian.dotconf.net/menu/Software/SendEmail/) que esta disponible en los repos de ubuntu. el archivo de config se genera una vez ejecutado por primera vez.

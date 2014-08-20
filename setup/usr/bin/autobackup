@@ -1,0 +1,656 @@
+#! /bin/bash
+echo "----------------------------------------"
+echo "               AutoBackup"
+echo "            v0.13.03.22-1742"
+echo "----------------------------------------"
+echo "             LAGA Systems"
+echo "        Luciano Javier Lagassa"
+echo "        info@lagasystems.com.ar"
+echo "        www.lagasystems.com.ar"
+echo "----------------------------------------"
+# Varibles de Hora y Fecha
+Equipo="$HostName"
+Tiempo=`date +"%d/%m/%Y,%H:%M:%S"`
+Fecha=`date +"%d-%m-%y"`
+Inicio=`date +"%H:%M:%S"`
+Hora=`date +"hora%H"`
+Dia=`date +"dia%u"`
+#
+# eMail Config
+if [ -f "/etc/autobackup.conf" ]
+then
+ . "/etc/autobackup.conf"
+ if [ "$HostName" = "NOMBRE DE EQUIPO" ]
+ then
+  About
+  echo "Error Archivos de Configuración Con Valores de Origen."
+  echo "Edite el Archivo Base en /etc/autobackup.conf."
+  exit 1
+ fi
+else
+ About
+ echo "Error Archivos de Configuración No Existe."
+ echo '## AutoBackup Config' > /etc/autobackup.conf
+ echo 'HostName="NOMBRE DE EQUIPO"' >> /etc/autobackup.conf
+ echo 'eMailUser="CORREO@PROVEEDOR.COM"' >> /etc/autobackup.conf
+ echo 'eMailPass="CONTRASEÑA"' >> /etc/autobackup.conf
+ echo 'eMailTo="DESTINO@LOQUESEA.COM"' >> /etc/autobackup.conf
+ echo 'eMailServer="SERVIDOR-SMTP.COM:PUERTO-SMTP"' >> /etc/autobackup.conf
+ echo 'eMailSSL="MODOCAPASEGURA(yes-no)"' >> /etc/autobackup.conf
+ echo '##' >> /etc/autobackup.conf
+ echo "Se Creo Archivo Base en /etc/autobackup.conf, Completar con Datos de Correo"
+ exit 1
+fi
+#
+#
+case $# in
+ 1)
+  if [ "$1" = "test" ]
+  then
+   echo "Prueba de Correo"
+   sendEmail -q -f $eMailUser -t $eMailTo -u "AutoBackup: Prueba de Correo desde $HostName" -m "AutoBackup: Prueba de Correo desde $HostName" -s $eMailServer -o tls=$eMailSSL -xu $eMailUser -xp $eMailPass &
+   exit
+  fi
+ ;;
+ 4)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="NO"
+  Archivo1="NO"
+  # 
+  # Copia2
+  Copia2="NO"
+  Archivo2="NO"
+  # 
+  # Copia3
+  Copia3="NO"
+  Archivo3="NO"
+  #
+  # Copia4
+  Copia4="NO"
+  Archivo4="NO"
+  # 
+  # Copia5
+  Copia5="NO"
+  Archivo5="NO"
+  # 
+ ;;
+ 5)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="$5"
+  Archivo1=$Copia1/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia1/$Dia" ]
+  then
+   mkdir $Copia1/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia1/$Dia/$Hora" ]
+  then
+   mkdir $Copia1/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia2
+  Copia2="NO"
+  Archivo2="NO"
+  # 
+  # Copia3
+  Copia3="NO"
+  Archivo3="NO"
+  #
+  # Copia4
+  Copia4="NO"
+  Archivo4="NO"
+  # 
+  # Copia5
+  Copia5="NO"
+  Archivo5="NO"
+  # 
+ ;;
+ 6)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="$5"
+  Archivo1=$Copia1/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia1/$Dia" ]
+  then
+   mkdir $Copia1/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia1/$Dia/$Hora" ]
+  then
+   mkdir $Copia1/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia2
+  Copia2="$6"
+  Archivo2=$Copia2/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia2/$Dia" ]
+  then
+   mkdir $Copia2/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia2/$Dia/$Hora" ]
+  then
+   mkdir $Copia2/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia3
+  Copia3="NO"
+  Archivo3="NO"
+  #
+  # Copia4
+  Copia4="NO"
+  Archivo4="NO"
+  # 
+  # Copia5
+  Copia5="NO"
+  Archivo5="NO"
+  # 
+ ;;
+ 7)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="$5"
+  Archivo1=$Copia1/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia1/$Dia" ]
+  then
+   mkdir $Copia1/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia1/$Dia/$Hora" ]
+  then
+   mkdir $Copia1/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia2
+  Copia2="$6"
+  Archivo2=$Copia2/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia2/$Dia" ]
+  then
+   mkdir $Copia2/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia2/$Dia/$Hora" ]
+  then
+   mkdir $Copia2/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia3
+  Copia3="$7"
+  Archivo3=$Copia3/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia3/$Dia" ]
+  then
+   mkdir $Copia3/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia3/$Dia/$Hora" ]
+  then
+   mkdir $Copia3/$Dia/$Hora >> /dev/null
+  fi
+  #
+  # Copia4
+  Copia4="NO"
+  Archivo4="NO"
+  # 
+  # Copia5
+  Copia5="NO"
+  Archivo5="NO"
+  # 
+ ;;
+ 8)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="$5"
+  Archivo1=$Copia1/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia1/$Dia" ]
+  then
+   mkdir $Copia1/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia1/$Dia/$Hora" ]
+  then
+   mkdir $Copia1/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia2
+  Copia2="$6"
+  Archivo2=$Copia2/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia2/$Dia" ]
+  then
+   mkdir $Copia2/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia2/$Dia/$Hora" ]
+  then
+   mkdir $Copia2/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia3
+  Copia3="$7"
+  Archivo3=$Copia3/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia3/$Dia" ]
+  then
+   mkdir $Copia3/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia3/$Dia/$Hora" ]
+  then
+   mkdir $Copia3/$Dia/$Hora >> /dev/null
+  fi
+  #
+  # Copia4
+  Copia4=$8
+  Archivo4=$Copia4/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia4/$Dia" ]
+  then
+   mkdir $Copia4/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia4/$Dia/$Hora" ]
+  then
+   mkdir $Copia4/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia5
+  Copia5="NO"
+  Archivo5="NO"
+  # 
+ ;;
+ 9)
+  # Variables de Archivos y Carpetas
+  Nombre="$1"
+  Origen="$2"
+  Destino="$3"
+  Clonar="$4"
+  Temporal="NO"
+  Archivo=$Destino/$Dia/$Hora/$Nombre".zip"
+  Registro=$HOME/$Nombre".txt"
+  #
+  # Carpetas
+  if [ ! -d "$Destino/$Dia" ]
+  then
+   mkdir $Destino/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Destino/$Dia/$Hora" ]
+  then
+   mkdir $Destino/$Dia/$Hora >> /dev/null
+  fi
+  if [ ! "$Clonar" = "NO" ]
+  then
+   Temporal=$Destino"/temp/"$Nombre/
+   if [ ! -d "$Temporal" ]
+   then
+    mkdir $Temporal >> /dev/null
+   fi
+  fi
+  #
+  # Copia1
+  Copia1="$5"
+  Archivo1=$Copia1/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia1/$Dia" ]
+  then
+   mkdir $Copia1/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia1/$Dia/$Hora" ]
+  then
+   mkdir $Copia1/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia2
+  Copia2="$6"
+  Archivo2=$Copia2/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia2/$Dia" ]
+  then
+   mkdir $Copia2/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia2/$Dia/$Hora" ]
+  then
+   mkdir $Copia2/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia3
+  Copia3="$7"
+  Archivo3=$Copia3/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia3/$Dia" ]
+  then
+   mkdir $Copia3/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia3/$Dia/$Hora" ]
+  then
+   mkdir $Copia3/$Dia/$Hora >> /dev/null
+  fi
+  #
+  # Copia4
+  Copia4=$8
+  Archivo4=$Copia4/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia4/$Dia" ]
+  then
+   mkdir $Copia4/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia4/$Dia/$Hora" ]
+  then
+   mkdir $Copia4/$Dia/$Hora >> /dev/null
+  fi
+  # 
+  # Copia5
+  Copia5=$9
+  Archivo5=$Copia5/$Dia/$Hora/$Nombre".zip"
+  if [ ! -d "$Copia5/$Dia" ]
+  then
+   mkdir $Copia5/$Dia >> /dev/null
+  fi
+  if [ ! -d "$Copia5/$Dia/$Hora" ]
+  then
+   mkdir $Copia5/$Dia/$Hora >> /dev/null
+  fi
+  # 
+ ;;
+ *)
+  echo "Error en Linea de Comandos"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO]"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO] COPIA1"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO] COPIA1 COPIA2"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO] COPIA1 COPIA2 COPIA3"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO] COPIA1 COPIA2 COPIA3 COPIA4"
+  echo "autobackup NOMBRE ORIGEN DESTINO CLONAR[SI-NO] COPIA1 COPIA2 COPIA3 COPIA4 COPIA5"
+  echo "----------------------------------------"
+  exit 3
+ ;;
+esac
+#
+# Muestra Datos
+echo "Nombre: "$Nombre
+echo "Origen: "$Origen
+echo "Destino: "$Destino
+echo "Clonar: "$Clonar
+#echo "Temporal: "$Temporal
+echo "Archivo: "$Archivo
+echo "Copias"
+echo " -> Copia1: "$Archivo1
+echo " -> Copia2: "$Archivo2
+echo " -> Copia3: "$Archivo3
+echo " -> Copia4: "$Archivo4
+echo " -> Copia5: "$Archivo5
+echo "Correo"
+echo " -> Usuario: "$eMailUser
+echo " -> Contraseña: ########"
+echo " -> Para: "$eMailTo
+echo " -> Servidor: "$eMailServer
+echo " -> SSL: "$eMailSSL
+#
+echo "----------------------------------------"
+if [ "$Clonar" = "NO" ]
+then
+ # Inicia Respaldo
+ echo "Respaldo -> Iniciado [OK]"
+ #
+ # Busca Archivo ZIP
+ if [ -f "$Archivo" ]
+ then
+  echo "Respaldo -> Eliminando..."
+  rm -R $Archivo >> /dev/null
+  echo "Respaldo -> Eliminado [OK]"
+ fi
+ #
+ # Crea Archivo ZIP
+ echo "Respaldo -> Generado..."
+ zip -r $Archivo $Origen >> /dev/null
+ #
+else
+ # Inicia Respaldo
+ echo "Respaldo -> Iniciado [OK]"
+ echo "Temporales -> Clonando..."
+ cp -R $Origen/ $Temporal >> /dev/null
+ echo "Temporales -> Clonado [OK]"
+ #
+ # Busca Archivo ZIP
+ if [ -f "$Archivo" ]
+ then
+  echo "Respaldo -> Eliminando..."
+  rm -R $Archivo >> /dev/null
+  echo "Respaldo -> Eliminado [OK]"
+ fi
+ #
+ # Genera Hash
+ #HashKey="$Nombre.zip"
+ #Hash=`echo "$HashKey" | openssl md5 | awk '{print$2}'`
+ #Hash=`echo "$HashKey" | md5sum | awk '{print$1}'`
+ #
+ # Crea Archivo ZIP
+ echo "Respaldo -> Generado..."
+ #zip -q -r -P $Hash $Archivo $Temporal >> /dev/null
+ zip -q -r $Archivo $Temporal >> /dev/null
+ #
+fi
+# Testea Archivo ZIP
+if [ "`zip -T $Archivo`" = "test of $Archivo OK" ]
+then 
+ echo "Respaldo -> Generado [OK]"
+ # Copia1
+ if [ "$Archivo1" != "NO" ]
+ then
+  if [ -f "$Archivo1" ]
+  then
+    rm -R $Archivo1 >> /dev/null
+  fi
+  echo "Respaldo(Copia1) -> Duplicando..."
+  cp $Archivo $Archivo1
+  echo "Respaldo(Copia1) -> Duplicado [OK]"
+ fi
+ #
+ # Copia2
+ if [ "$Archivo2" != "NO" ]
+ then
+  if [ -f "$Archivo2" ]
+  then
+    rm -R $Archivo2 >> /dev/null
+  fi
+  echo "Respaldo(Copia2) -> Duplicando..."
+  cp $Archivo $Archivo2
+  echo "Respaldo(Copia2) -> Duplicado [OK]"
+ fi
+ #
+ # Copia3
+ if [ "$Archivo3" != "NO" ]
+ then
+  if [ -f "$Archivo3" ]
+  then
+    rm -R $Archivo3 >> /dev/null
+  fi
+  echo "Respaldo(Copia3) -> Duplicando..."
+  cp $Archivo $Archivo3
+  echo "Respaldo(Copia3) -> Duplicado [OK]"
+ fi
+ #
+ # Copia4
+ if [ "$Archivo4" != "NO" ]
+ then
+  if [ -f "$Archivo4" ]
+  then
+    rm -R $Archivo4 >> /dev/null
+  fi
+  echo "Respaldo(Copia4) -> Duplicando..."
+  cp $Archivo $Archivo4
+  echo "Respaldo(Copia4) -> Duplicado [OK]"
+ fi
+ #
+ # Copia5
+ if [ "$Archivo5" != "NO" ]
+ then
+  if [ -f "$Archivo5" ]
+  then
+    rm -R $Archivo5 >> /dev/null
+  fi
+  echo "Respaldo(Copia5) -> Duplicando..."
+  cp $Archivo $Archivo5
+  echo "Respaldo(Copia5) -> Duplicado [OK]"
+ fi
+ #
+ Final=`date +"%H:%M:%S"`
+ if [ "$eMailUser" = "NO" ]
+ then
+  echo "Correo -> Enviando..."
+  echo "Correo -> Enviado [NO]"
+ else
+  echo "Correo -> Enviando..."
+  sendEmail -q -f $eMailUser -t $eMailTo -u "Respaldo desde $HostName" -m "Respaldo desde $HostName\nOrigen: $Origen\nDestino: $Archivo\nClonar: $Clonar\nCopia1: $Archivo1\nCopia2: $Archivo2\nCopia3: $Archivo3\nCopia4: $Archivo4\nCopia5: $Archivo5\nFecha: $Fecha\nInicio: $Inicio\nFinal: $Final" -s $eMailServer -o tls=$eMailSSL -xu $eMailUser -xp $eMailPass
+  echo "Correo -> Enviado [OK]"
+ fi
+ Estado="OK"
+else 
+ Final=`date +"%H:%M:%S"`
+ echo "Respaldo -> Generado [NO]"
+ Final=`date +"%H:%M:%S"`
+ if [ "$eMailUser" = "NO" ]
+ then
+  echo "Correo -> Enviando..."
+  echo "Correo -> Enviado [NO]"
+ else
+  echo "Correo -> Enviando..."
+ sendEmail -q -f $eMailUser -t $eMailTo -u "Respaldo Fallido desde $HostName" -m "Respaldo Fallido desde $HostName\nOrigen: $Origen\nDestino: $Archivo\nClonar: $Clonar\nCopia1: $Archivo1\nCopia2: $Archivo2\nCopia3: $Archivo3\nCopia4: $Archivo4\nCopia5: $Archivo5\nFecha: $Fecha\nInicio: $Inicio\nFinal: $Final" -s $eMailServer -o tls=$eMailSSL -xu $eMailUser -xp $eMailPass
+  echo "Correo -> Enviado [OK]"
+ fi
+ Estado="NO"
+fi 
+#
+# Elimina Temporales
+if [ ! "$Clonar" = "NO" ]
+then
+ echo "Temporales -> Eliminando..."
+ rm -R $Temporal >> /dev/null
+ echo "Temporales -> Eliminados [OK]"
+fi
+#
+#
+if [ "$Dia" = "Dia7" ]
+then
+ echo $Tiempo","$Archivo","$Estado > $Registro
+else
+ echo $Tiempo","$Archivo","$Estado >> $Registro
+fi
+# Termina Respaldo
+echo "Respaldo -> Finalizado [$Estado]"
+echo "----------------------------------------"
+exit 0
+#

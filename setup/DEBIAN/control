@@ -1,0 +1,7 @@
+Package: autobackup
+Version: 0.13.03.22-1742
+Architecture: all
+Maintainer: Luciano Javier Lagassa <lucianolagassa@gmail.com>
+Section: partner/web
+Priority: optional
+Description: Permite Realizar Copias de Seguridad Automaticas Simples y Multiples., Modo de Uso: autobackup NOMBRE ORIGEN DESTINO CLONAR(SI o NO) COPIA1 COPIA2 COPIA3 COPIA4 COPIA5
